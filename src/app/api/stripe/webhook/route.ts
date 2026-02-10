@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
 import { generateQRPayload } from "@/lib/qr";
@@ -55,7 +56,6 @@ export async function POST(req: NextRequest) {
   }
 
   // Atomic insert — UNIQUE constraint on stripe_session_id prevents duplicates
-  // This eliminates the TOCTOU race condition of a SELECT-then-INSERT pattern
   const { error: insertError } = await supabase.from("tickets").insert({
     ticket_code: ticketCode,
     ticket_type: ticketType,
@@ -73,7 +73,6 @@ export async function POST(req: NextRequest) {
   });
 
   if (insertError) {
-    // 23505 = unique_violation — another request already processed this session
     if (insertError.code === "23505") {
       return NextResponse.json({ received: true, message: "Already processed" });
     }
@@ -84,33 +83,33 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Generate PDF
-  try {
-    const pdfBuffer = await generateTicketPDF(
-      ticketCode,
-      ticketType,
-      buyerName,
-      qrPayload,
-    );
+  // Return 200 to Stripe immediately — PDF generation + email happens in background
+  // This prevents Stripe from retrying due to timeout
+  after(async () => {
+    try {
+      const pdfBuffer = await generateTicketPDF(
+        ticketCode,
+        ticketType,
+        buyerName,
+        qrPayload,
+      );
 
-    // Send email
-    await sendTicketEmail(
-      buyerEmail,
-      buyerName,
-      ticketCode,
-      ticketType,
-      pdfBuffer,
-    );
+      await sendTicketEmail(
+        buyerEmail,
+        buyerName,
+        ticketCode,
+        ticketType,
+        pdfBuffer,
+      );
 
-    // Update email_sent_at
-    await supabase
-      .from("tickets")
-      .update({ email_sent_at: new Date().toISOString() })
-      .eq("ticket_code", ticketCode);
-  } catch (err) {
-    console.error("PDF/Email error:", err);
-    // Ticket is created, email can be retried — don't fail the webhook
-  }
+      await supabase
+        .from("tickets")
+        .update({ email_sent_at: new Date().toISOString() })
+        .eq("ticket_code", ticketCode);
+    } catch (err) {
+      console.error("PDF/Email error for ticket:", ticketCode, err);
+    }
+  });
 
   return NextResponse.json({ received: true, ticketCode });
 }
