@@ -57,13 +57,11 @@ export function ScanResult({ result, onDismiss }: ScanResultProps) {
     }
   }, [isOk]);
 
-  const bgColor = isOk
-    ? "bg-green-500"
+  const bgClass = isOk
+    ? "from-emerald-600 to-emerald-700"
     : isAlreadyUsed
-      ? "bg-orange-500"
-      : "bg-red-600";
-
-  const icon = isOk ? "✓" : isAlreadyUsed ? "⚠" : "✕";
+      ? "from-amber-500 to-amber-600"
+      : "from-red-600 to-red-700";
 
   const label = isOk
     ? "OK"
@@ -73,17 +71,39 @@ export function ScanResult({ result, onDismiss }: ScanResultProps) {
 
   return (
     <div
-      className={`fixed inset-0 ${bgColor} flex flex-col items-center justify-center z-50 cursor-pointer`}
+      className={`fixed inset-0 bg-gradient-to-b ${bgClass} flex flex-col items-center justify-center z-50 cursor-pointer`}
       onClick={handleDismiss}
     >
-      <div className="text-white text-center">
-        <div className="text-[120px] leading-none font-bold mb-4">{icon}</div>
-        <div className="text-4xl font-bold mb-6">{label}</div>
+      <div className="text-white text-center px-6">
+        {/* Icon */}
+        <div className="mb-6">
+          {isOk ? (
+            <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-white/15 backdrop-blur-sm">
+              <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </div>
+          ) : isAlreadyUsed ? (
+            <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-white/15 backdrop-blur-sm">
+              <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+              </svg>
+            </div>
+          ) : (
+            <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-white/15 backdrop-blur-sm">
+              <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <div className="text-4xl font-bold mb-6 tracking-wide">{label}</div>
 
         {result.ticket && (
           <div className="space-y-2 text-xl">
             {result.ticket.buyer_name && (
-              <div>{result.ticket.buyer_name}</div>
+              <div className="font-medium">{result.ticket.buyer_name}</div>
             )}
             <div className="opacity-80">{result.ticket.ticket_type}</div>
             {result.ticket.used_at && (
@@ -98,8 +118,8 @@ export function ScanResult({ result, onDismiss }: ScanResultProps) {
           <div className="text-lg opacity-80">{result.message}</div>
         )}
 
-        <div className="mt-10 text-sm opacity-50">
-          {isOk ? "Auto-dismissing in 3s..." : "Tap to dismiss"}
+        <div className="mt-12 text-sm opacity-40">
+          {isOk ? "Auto-dismissing in 3s..." : "Tap anywhere to dismiss"}
         </div>
       </div>
     </div>

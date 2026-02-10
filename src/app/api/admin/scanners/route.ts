@@ -4,24 +4,33 @@ import { verifyAdminToken } from "@/lib/admin-auth";
 import bcrypt from "bcryptjs";
 
 export async function GET() {
-  const isAdmin = await verifyAdminToken();
-  if (!isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  try {
+    const isAdmin = await verifyAdminToken();
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  const { data, error } = await supabase
-    .from("scanners")
-    .select("id, name, is_active, created_at")
-    .order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("scanners")
+      .select("id, name, is_active, created_at")
+      .order("created_at", { ascending: false });
 
-  if (error) {
+    if (error) {
+      console.error("Supabase scanners fetch error:", error);
+      return NextResponse.json(
+        { error: "Failed to fetch scanners" },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json(data ?? []);
+  } catch (err) {
+    console.error("Admin scanners GET error:", err);
     return NextResponse.json(
-      { error: "Failed to fetch scanners" },
+      { error: "Internal server error" },
       { status: 500 },
     );
   }
-
-  return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {

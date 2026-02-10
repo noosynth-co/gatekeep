@@ -1,7 +1,7 @@
 export const EVENT = {
-  name: "Mecz Polska vs Niemcy",
-  date: "15 marca 2026, 18:00",
-  venue: "Stadion Narodowy, Warszawa",
+  name: "MMA Test Fight #12",
+  date: "28 February 2026, 20:00",
+  venue: "The O2 Arena, London",
 } as const;
 
 export const TICKET_TYPE_MAP: Record<string, string> = {

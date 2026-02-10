@@ -54,66 +54,95 @@ export default function ScanLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="bg-gray-800 rounded-2xl p-8 max-w-sm w-full mx-4">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white">{APP_NAME}</h1>
-          <p className="text-gray-400 mt-2">Scanner Login</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-950">
+      <div className="w-full max-w-sm mx-4">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/10 border border-blue-500/20 mb-5">
+            <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-white">{APP_NAME}</h1>
+          <p className="text-gray-500 text-sm mt-1.5">Scanner Login</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">Gate</label>
-            {loadingScanners ? (
-              <div className="bg-gray-700 rounded-lg p-3 text-gray-400 text-center">
-                Loading gates...
-              </div>
-            ) : (
-              <select
-                value={selectedScanner}
-                onChange={(e) => setSelectedScanner(e.target.value)}
-                required
-                className="w-full bg-gray-700 text-white rounded-lg p-3 border border-gray-600 focus:border-blue-500 focus:outline-none"
-              >
-                <option value="">Select gate...</option>
-                {scanners.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">PIN</label>
-            <input
-              type="password"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={6}
-              value={pin}
-              onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-              placeholder="6-digit PIN"
-              required
-              className="w-full bg-gray-700 text-white text-center text-2xl tracking-[0.5em] rounded-lg p-3 border border-gray-600 focus:border-blue-500 focus:outline-none"
-            />
-          </div>
-
-          {error && (
-            <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-2 rounded-lg text-sm text-center">
-              {error}
+        {/* Card */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+                Gate
+              </label>
+              {loadingScanners ? (
+                <div className="bg-gray-800 rounded-xl px-4 py-3 text-gray-500 text-center text-sm border border-gray-700 flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Loading gates...
+                </div>
+              ) : (
+                <select
+                  value={selectedScanner}
+                  onChange={(e) => setSelectedScanner(e.target.value)}
+                  required
+                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all appearance-none"
+                >
+                  <option value="">Select gate...</option>
+                  {scanners.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
-          )}
 
-          <button
-            type="submit"
-            disabled={loading || !selectedScanner || pin.length < 4}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold py-3 rounded-lg transition-colors"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+            <div>
+              <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+                PIN
+              </label>
+              <input
+                type="password"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={6}
+                value={pin}
+                onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+                placeholder="------"
+                required
+                className="w-full bg-gray-800 text-white text-center text-2xl tracking-[0.5em] rounded-xl px-4 py-3 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all placeholder:text-gray-700 font-mono"
+              />
+            </div>
+
+            {error && (
+              <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2.5 rounded-xl text-sm">
+                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                </svg>
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading || !selectedScanner || pin.length < 4}
+              className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium py-3 rounded-xl transition-all"
+            >
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Signing in...
+                </span>
+              ) : "Sign in"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

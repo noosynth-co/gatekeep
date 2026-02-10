@@ -77,15 +77,22 @@ export function Scanner({ onResult }: ScannerProps) {
     <div className="relative">
       <div
         id="qr-reader"
-        className="w-full max-w-md mx-auto rounded-lg overflow-hidden"
+        className="w-full max-w-md mx-auto overflow-hidden"
       />
       {!scanning && !error && (
-        <div className="text-center text-gray-400 mt-4">
+        <div className="flex items-center justify-center gap-2 text-gray-500 text-sm py-16">
+          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
           Starting camera...
         </div>
       )}
       {error && (
-        <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg mt-4 text-center">
+        <div className="m-4 flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm">
+          <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
           {error}
         </div>
       )}
