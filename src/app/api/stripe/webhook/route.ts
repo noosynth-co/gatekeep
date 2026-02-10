@@ -34,17 +34,6 @@ export async function POST(req: NextRequest) {
 
   const session = event.data.object;
 
-  // Idempotency check
-  const { data: existing } = await supabase
-    .from("tickets")
-    .select("id")
-    .eq("stripe_session_id", session.id)
-    .single();
-
-  if (existing) {
-    return NextResponse.json({ received: true, message: "Already processed" });
-  }
-
   // Get line items to determine ticket type
   const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
   const priceId = lineItems.data[0]?.price?.id || "";
@@ -65,7 +54,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Insert ticket
+  // Atomic insert — UNIQUE constraint on stripe_session_id prevents duplicates
+  // This eliminates the TOCTOU race condition of a SELECT-then-INSERT pattern
   const { error: insertError } = await supabase.from("tickets").insert({
     ticket_code: ticketCode,
     ticket_type: ticketType,
@@ -83,6 +73,10 @@ export async function POST(req: NextRequest) {
   });
 
   if (insertError) {
+    // 23505 = unique_violation — another request already processed this session
+    if (insertError.code === "23505") {
+      return NextResponse.json({ received: true, message: "Already processed" });
+    }
     console.error("Failed to insert ticket:", insertError);
     return NextResponse.json(
       { error: "Database error" },
