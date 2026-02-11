@@ -30,7 +30,7 @@ function buildTicketEmailHtml(
 <body style="margin:0;padding:0;background-color:#f4f4f5;font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;">
   <!-- Preheader (hidden preview text) -->
   <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
-    Your ${ticketType} ticket for ${EVENT.name} is confirmed! Check your attachment for the QR code.
+    Your ${ticketType} for ${EVENT.name} is confirmed! Check your attachment for the QR code.
     &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
   </div>
 
@@ -66,7 +66,7 @@ function buildTicketEmailHtml(
                 <tr>
                   <td style="background-color:#dc2626;padding:14px 24px;text-align:center;">
                     <span style="font-size:13px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:2px;">
-                      ${ticketType} Ticket
+                      ${ticketType}
                     </span>
                   </td>
                 </tr>
@@ -210,7 +210,7 @@ export async function sendTicketEmail(
   const { error } = await getResend().emails.send({
     from: process.env.EMAIL_FROM!,
     to,
-    subject: `Your ${ticketType} Ticket for ${EVENT.name} 🎟️`,
+    subject: `Your ${ticketType} for ${EVENT.name} 🎟️`,
     html: buildTicketEmailHtml(buyerName, ticketCode, ticketType),
     attachments: [
       {
