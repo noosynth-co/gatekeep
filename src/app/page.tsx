@@ -1,14 +1,18 @@
+import Image from "next/image";
 import { APP_NAME, EVENT } from "@/lib/constants";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
       <div className="text-center p-8 max-w-lg">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 mb-6">
-          <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
-          </svg>
-        </div>
+        <Image
+          src="/wffl-logo.png"
+          alt="World Freak Fight League"
+          width={160}
+          height={107}
+          className="mx-auto mb-8"
+          priority
+        />
         <h1 className="text-4xl font-bold text-white mb-2">{APP_NAME}</h1>
         <p className="text-neutral-500 mb-10">Event Ticket System</p>
 
