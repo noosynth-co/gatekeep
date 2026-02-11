@@ -13,30 +13,47 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { payload } = await req.json();
+  const { payload, ticketCode: manualCode } = await req.json();
 
-  if (!payload || typeof payload !== "string") {
+  const TICKET_CODE_RE = /^GK-[A-Z0-9]{8}$/;
+
+  let ticketCode: string | undefined;
+  let rawPayload: string;
+
+  if (manualCode && typeof manualCode === "string") {
+    // Manual entry flow — validate format, skip HMAC
+    const code = manualCode.toUpperCase().trim();
+    if (!TICKET_CODE_RE.test(code)) {
+      return NextResponse.json({
+        result: "INVALID",
+        message: "Invalid ticket code format",
+      } satisfies ScanResponse);
+    }
+    ticketCode = code;
+    rawPayload = `manual:${code}`;
+  } else if (payload && typeof payload === "string") {
+    // QR scan flow — verify HMAC
+    const { valid, ticketCode: verified } = verifyQRPayload(payload);
+    rawPayload = payload.substring(0, 500);
+
+    if (!valid || !verified) {
+      await supabase.from("scan_log").insert({
+        scanner_id: scanner.scannerId,
+        result: "INVALID",
+        raw_payload: rawPayload,
+      });
+
+      return NextResponse.json({
+        result: "INVALID",
+        message: "Invalid QR code",
+      } satisfies ScanResponse);
+    }
+    ticketCode = verified;
+  } else {
     return NextResponse.json(
       { result: "INVALID", message: "No payload" } satisfies ScanResponse,
       { status: 200 },
     );
-  }
-
-  // Verify HMAC
-  const { valid, ticketCode } = verifyQRPayload(payload);
-
-  if (!valid || !ticketCode) {
-    // Log invalid scan
-    await supabase.from("scan_log").insert({
-      scanner_id: scanner.scannerId,
-      result: "INVALID",
-      raw_payload: payload.substring(0, 500),
-    });
-
-    return NextResponse.json({
-      result: "INVALID",
-      message: "Invalid QR code",
-    } satisfies ScanResponse);
   }
 
   // Atomic update: only update if status is 'active'
@@ -64,7 +81,7 @@ export async function POST(req: NextRequest) {
       await supabase.from("scan_log").insert({
         scanner_id: scanner.scannerId,
         result: "INVALID",
-        raw_payload: payload.substring(0, 500),
+        raw_payload: rawPayload,
       });
 
       return NextResponse.json({
@@ -78,7 +95,7 @@ export async function POST(req: NextRequest) {
       ticket_id: existing.id,
       scanner_id: scanner.scannerId,
       result: "ALREADY_USED",
-      raw_payload: payload.substring(0, 500),
+      raw_payload: rawPayload,
     });
 
     return NextResponse.json({
@@ -96,7 +113,7 @@ export async function POST(req: NextRequest) {
     ticket_id: updated.id,
     scanner_id: scanner.scannerId,
     result: "OK",
-    raw_payload: payload.substring(0, 500),
+    raw_payload: rawPayload,
   });
 
   return NextResponse.json({

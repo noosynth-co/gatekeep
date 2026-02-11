@@ -13,6 +13,8 @@ export function Scanner({ onResult }: ScannerProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const processingRef = useRef(false);
+  const [torchSupported, setTorchSupported] = useState(false);
+  const [torchOn, setTorchOn] = useState(false);
 
   const handleScan = useCallback(
     async (decodedText: string) => {
@@ -58,7 +60,17 @@ export function Scanner({ onResult }: ScannerProps) {
         handleScan,
         () => {},
       )
-      .then(() => setScanning(true))
+      .then(() => {
+        setScanning(true);
+        try {
+          const caps = scanner.getRunningTrackCameraCapabilities();
+          if (caps.torchFeature().isSupported()) {
+            setTorchSupported(true);
+          }
+        } catch {
+          // torch detection not available
+        }
+      })
       .catch((err) => {
         console.error("Camera error:", err);
         setError(
@@ -73,12 +85,40 @@ export function Scanner({ onResult }: ScannerProps) {
     };
   }, [handleScan]);
 
+  const toggleTorch = useCallback(async () => {
+    if (!scannerRef.current) return;
+    try {
+      const torch = scannerRef.current.getRunningTrackCameraCapabilities().torchFeature();
+      const next = !torchOn;
+      await torch.apply(next);
+      setTorchOn(next);
+    } catch {
+      // torch toggle failed
+    }
+  }, [torchOn]);
+
   return (
     <div className="relative">
       <div
         id="qr-reader"
         className="w-full max-w-md mx-auto overflow-hidden"
       />
+      {scanning && torchSupported && (
+        <button
+          type="button"
+          onClick={toggleTorch}
+          className={`absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+            torchOn
+              ? "bg-accent text-white"
+              : "bg-black/50 text-neutral-400 hover:text-white"
+          }`}
+          aria-label={torchOn ? "Turn off flashlight" : "Turn on flashlight"}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547Z" />
+          </svg>
+        </button>
+      )}
       {!scanning && !error && (
         <div className="flex items-center justify-center gap-2 text-neutral-500 text-sm py-16">
           <svg className="w-4 h-4 animate-spin text-accent" viewBox="0 0 24 24" fill="none">
