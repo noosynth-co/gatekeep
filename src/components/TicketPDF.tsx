@@ -6,13 +6,28 @@ import {
   View,
   Image,
   StyleSheet,
+  Font,
 } from "@react-pdf/renderer";
 import { EVENT, APP_NAME } from "@/lib/constants";
+
+Font.register({
+  family: "Roboto",
+  fonts: [
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
+      fontWeight: 400,
+    },
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf",
+      fontWeight: 700,
+    },
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
     padding: 40,
-    fontFamily: "Helvetica",
+    fontFamily: "Roboto",
     backgroundColor: "#ffffff",
   },
   header: {
@@ -34,7 +49,8 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 24,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto",
+    fontWeight: 700,
     color: "#ffffff",
   },
   ticketCode: {
@@ -47,7 +63,8 @@ const styles = StyleSheet.create({
   },
   eventName: {
     fontSize: 20,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto",
+    fontWeight: 700,
     marginBottom: 8,
   },
   eventDetail: {
@@ -72,7 +89,8 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 14,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Roboto",
+    fontWeight: 700,
   },
   qrSection: {
     alignItems: "center",
