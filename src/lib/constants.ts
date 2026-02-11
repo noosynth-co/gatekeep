@@ -1,5 +1,5 @@
 export const EVENT = {
-  name: "World Freak Fight League 2",
+  name: "WORLD FREAK FIGHT LEAGUE 2",
   date: "February 28, 2026, 20:30",
   venue: "4HP, Pearson St, Wolverhampton, UK",
 } as const;
