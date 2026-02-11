@@ -18,7 +18,7 @@ export default function ScanDashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="flex-1 bg-[#0a0a0a] text-white">
       <header className="border-b border-border bg-[#0a0a0a]/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-center gap-3">
           <div className="w-7 h-7 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">

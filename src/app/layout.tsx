@@ -39,9 +39,29 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        {children}
+        <div className="flex-1 flex flex-col">{children}</div>
+        <footer className="py-3 text-center text-xs text-neutral-500">
+          made by{" "}
+          <a
+            href="https://awsd.biz.pl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-neutral-300 transition-colors"
+          >
+            AWSD
+          </a>
+          {" & "}
+          <a
+            href="https://noosynth.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-neutral-300 transition-colors"
+          >
+            Noosynth
+          </a>
+        </footer>
       </body>
     </html>
   );

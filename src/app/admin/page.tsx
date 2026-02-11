@@ -125,7 +125,7 @@ export default function AdminPage() {
 
   if (!loggedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+      <div className="flex-1 flex items-center justify-center bg-[#0a0a0a]">
         <div className="w-full max-w-sm mx-4">
           <div className="text-center mb-10">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 mb-5">
@@ -186,7 +186,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="flex-1 bg-[#0a0a0a] text-white">
       <header className="border-b border-border bg-[#0a0a0a]/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">

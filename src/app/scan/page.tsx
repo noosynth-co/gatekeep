@@ -54,7 +54,7 @@ export default function ScanLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+    <div className="flex-1 flex items-center justify-center bg-[#0a0a0a]">
       <div className="w-full max-w-sm mx-4">
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 mb-5">

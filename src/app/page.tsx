@@ -3,7 +3,7 @@ import { APP_NAME, EVENT } from "@/lib/constants";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+    <div className="flex-1 flex items-center justify-center bg-[#0a0a0a]">
       <div className="text-center p-8 max-w-lg">
         <Image
           src="/wffl-logo.png"
