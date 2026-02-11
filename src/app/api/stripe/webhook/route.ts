@@ -3,6 +3,8 @@ import { after } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
 import { generateQRPayload } from "@/lib/qr";
+
+export const maxDuration = 60;
 import { generateTicketPDF } from "@/lib/pdf";
 import { sendTicketEmail } from "@/lib/email";
 import { TICKET_TYPE_MAP } from "@/lib/constants";
