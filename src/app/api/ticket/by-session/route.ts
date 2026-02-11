@@ -5,8 +5,6 @@ import { ensureTicketForSession } from "@/lib/create-ticket";
 import { generateTicketPDF } from "@/lib/pdf";
 import { sendTicketEmail } from "@/lib/email";
 
-export const maxDuration = 60;
-
 export async function GET(req: NextRequest) {
   const sessionId = req.nextUrl.searchParams.get("sessionId");
 
