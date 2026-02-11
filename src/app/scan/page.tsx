@@ -54,29 +54,27 @@ export default function ScanLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950">
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
       <div className="w-full max-w-sm mx-4">
-        {/* Logo */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/10 border border-blue-500/20 mb-5">
-            <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 mb-5">
+            <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-white">{APP_NAME}</h1>
-          <p className="text-gray-500 text-sm mt-1.5">Scanner Login</p>
+          <p className="text-neutral-500 text-sm mt-1.5">Scanner Login</p>
         </div>
 
-        {/* Card */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+        <div className="bg-surface/80 backdrop-blur-md border border-border rounded-2xl p-6">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
                 Gate
               </label>
               {loadingScanners ? (
-                <div className="bg-gray-800 rounded-xl px-4 py-3 text-gray-500 text-center text-sm border border-gray-700 flex items-center justify-center gap-2">
+                <div className="bg-surface-light rounded-xl px-4 py-3 text-neutral-500 text-center text-sm border border-border flex items-center justify-center gap-2">
                   <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -88,7 +86,7 @@ export default function ScanLoginPage() {
                   value={selectedScanner}
                   onChange={(e) => setSelectedScanner(e.target.value)}
                   required
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all appearance-none"
+                  className="w-full bg-surface-light text-white rounded-xl px-4 py-3 border border-border focus:border-accent focus:ring-1 focus:ring-accent/30 focus:outline-none transition-all appearance-none"
                 >
                   <option value="">Select gate...</option>
                   {scanners.map((s) => (
@@ -101,7 +99,7 @@ export default function ScanLoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
                 PIN
               </label>
               <input
@@ -113,7 +111,7 @@ export default function ScanLoginPage() {
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
                 placeholder="------"
                 required
-                className="w-full bg-gray-800 text-white text-center text-2xl tracking-[0.5em] rounded-xl px-4 py-3 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all placeholder:text-gray-700 font-mono"
+                className="w-full bg-surface-light text-white text-center text-2xl tracking-[0.5em] rounded-xl px-4 py-3 border border-border focus:border-accent focus:ring-1 focus:ring-accent/30 focus:outline-none transition-all placeholder:text-neutral-700 font-mono"
               />
             </div>
 
@@ -129,7 +127,7 @@ export default function ScanLoginPage() {
             <button
               type="submit"
               disabled={loading || !selectedScanner || pin.length < 4}
-              className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium py-3 rounded-xl transition-all"
+              className="w-full bg-accent hover:bg-accent-dark disabled:bg-neutral-800 disabled:text-neutral-500 text-black font-semibold py-3 rounded-xl transition-all"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">

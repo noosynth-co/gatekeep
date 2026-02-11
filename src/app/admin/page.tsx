@@ -123,27 +123,24 @@ export default function AdminPage() {
   const activeCount = scanners.filter((s) => s.is_active).length;
   const inactiveCount = scanners.filter((s) => !s.is_active).length;
 
-  // --- Login screen ---
   if (!loggedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
         <div className="w-full max-w-sm mx-4">
-          {/* Logo */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/10 border border-blue-500/20 mb-5">
-              <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 mb-5">
+              <svg className="w-8 h-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
               </svg>
             </div>
             <h1 className="text-2xl font-bold text-white">{APP_NAME}</h1>
-            <p className="text-gray-500 text-sm mt-1.5">Admin Panel</p>
+            <p className="text-neutral-500 text-sm mt-1.5">Admin Panel</p>
           </div>
 
-          {/* Card */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          <div className="bg-surface/80 backdrop-blur-md border border-border rounded-2xl p-6">
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">
                   Password
                 </label>
                 <input
@@ -153,7 +150,7 @@ export default function AdminPage() {
                   placeholder="Enter admin password"
                   required
                   autoFocus
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-3 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all placeholder:text-gray-600"
+                  className="w-full bg-surface-light text-white rounded-xl px-4 py-3 border border-border focus:border-accent focus:ring-1 focus:ring-accent/30 focus:outline-none transition-all placeholder:text-neutral-600"
                 />
               </div>
 
@@ -169,7 +166,7 @@ export default function AdminPage() {
               <button
                 type="submit"
                 disabled={loginLoading || !password}
-                className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-medium py-3 rounded-xl transition-all"
+                className="w-full bg-accent hover:bg-accent-dark disabled:bg-neutral-800 disabled:text-neutral-500 text-black font-semibold py-3 rounded-xl transition-all"
               >
                 {loginLoading ? (
                   <span className="inline-flex items-center gap-2">
@@ -188,35 +185,32 @@ export default function AdminPage() {
     );
   }
 
-  // --- Dashboard ---
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-sm sticky top-0 z-10">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <header className="border-b border-border bg-[#0a0a0a]/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center">
-              <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
+              <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
               </svg>
             </div>
-            <h1 className="text-sm font-semibold">{APP_NAME} <span className="text-gray-500 font-normal">/ Admin</span></h1>
+            <h1 className="text-sm font-semibold">{APP_NAME} <span className="text-neutral-500 font-normal">/ Admin</span></h1>
           </div>
-          <div className="flex items-center gap-3 text-xs text-gray-500">
+          <div className="flex items-center gap-3 text-xs text-neutral-500">
             <span>{activeCount} active</span>
             {inactiveCount > 0 && (
-              <span className="text-gray-600">{inactiveCount} inactive</span>
+              <span className="text-neutral-600">{inactiveCount} inactive</span>
             )}
           </div>
         </div>
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-        {/* Add scanner */}
-        <section className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-800 flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <section className="bg-surface/80 backdrop-blur-md border border-border rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-border flex items-center gap-3">
+            <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
+              <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
             </div>
@@ -226,22 +220,18 @@ export default function AdminPage() {
           <form onSubmit={handleAdd} className="p-6">
             <div className="grid grid-cols-1 sm:grid-cols-[1fr_140px_auto] gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1.5">
-                  Name
-                </label>
+                <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-1.5">Name</label>
                 <input
                   type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="e.g. Main Entrance"
                   required
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all placeholder:text-gray-600 text-sm"
+                  className="w-full bg-surface-light text-white rounded-xl px-4 py-2.5 border border-border focus:border-accent focus:ring-1 focus:ring-accent/30 focus:outline-none transition-all placeholder:text-neutral-600 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1.5">
-                  PIN
-                </label>
+                <label className="block text-xs font-medium text-neutral-400 uppercase tracking-wider mb-1.5">PIN</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -251,14 +241,14 @@ export default function AdminPage() {
                   onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ""))}
                   placeholder="4-6 digits"
                   required
-                  className="w-full bg-gray-800 text-white rounded-xl px-4 py-2.5 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 focus:outline-none transition-all placeholder:text-gray-600 text-sm font-mono tracking-widest"
+                  className="w-full bg-surface-light text-white rounded-xl px-4 py-2.5 border border-border focus:border-accent focus:ring-1 focus:ring-accent/30 focus:outline-none transition-all placeholder:text-neutral-600 text-sm font-mono tracking-widest"
                 />
               </div>
               <div className="flex items-end">
                 <button
                   type="submit"
                   disabled={addLoading || !newName || newPin.length < 4}
-                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all"
+                  className="w-full sm:w-auto bg-accent hover:bg-accent-dark disabled:bg-neutral-800 disabled:text-neutral-500 text-black text-sm font-semibold px-5 py-2.5 rounded-xl transition-all"
                 >
                   {addLoading ? "Adding..." : "Add"}
                 </button>
@@ -275,7 +265,7 @@ export default function AdminPage() {
             )}
 
             {addSuccess && (
-              <div className="mt-3 flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2.5 rounded-xl text-sm">
+              <div className="mt-3 flex items-center gap-2 bg-accent/10 border border-accent/20 text-accent px-4 py-2.5 rounded-xl text-sm">
                 <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>
@@ -285,20 +275,18 @@ export default function AdminPage() {
           </form>
         </section>
 
-        {/* Scanner list */}
-        <section className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
+        <section className="bg-surface/80 backdrop-blur-md border border-border rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+              <div className="w-7 h-7 rounded-lg bg-accent/10 flex items-center justify-center">
+                <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5Z" />
                 </svg>
               </div>
               <h2 className="text-sm font-semibold">Scanners</h2>
             </div>
             {loadingScanners && (
-              <svg className="w-4 h-4 text-gray-500 animate-spin" viewBox="0 0 24 24" fill="none">
+              <svg className="w-4 h-4 text-neutral-500 animate-spin" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
@@ -307,46 +295,31 @@ export default function AdminPage() {
 
           {scanners.length === 0 && !loadingScanners ? (
             <div className="px-6 py-12 text-center">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-gray-800 flex items-center justify-center">
-                <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5Z" />
-                </svg>
-              </div>
-              <p className="text-gray-500 text-sm">No scanners yet</p>
-              <p className="text-gray-600 text-xs mt-1">Add one using the form above</p>
+              <p className="text-neutral-500 text-sm">No scanners yet</p>
+              <p className="text-neutral-600 text-xs mt-1">Add one using the form above</p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-800">
+            <div className="divide-y divide-border">
               {scanners.map((s) => (
                 <div
                   key={s.id}
                   className={`px-6 py-4 flex items-center justify-between gap-4 transition-colors ${
-                    s.is_active
-                      ? "hover:bg-gray-800/50"
-                      : "opacity-50"
+                    s.is_active ? "hover:bg-surface-light/50" : "opacity-50"
                   }`}
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-2.5">
-                      <div
-                        className={`w-2 h-2 rounded-full shrink-0 ${
-                          s.is_active ? "bg-emerald-500" : "bg-gray-600"
-                        }`}
-                      />
-                      <span
-                        className={`font-medium text-sm truncate ${
-                          s.is_active ? "text-white" : "text-gray-500 line-through"
-                        }`}
-                      >
+                      <div className={`w-2 h-2 rounded-full shrink-0 ${s.is_active ? "bg-accent" : "bg-neutral-600"}`} />
+                      <span className={`font-medium text-sm truncate ${s.is_active ? "text-white" : "text-neutral-500 line-through"}`}>
                         {s.name}
                       </span>
                       {!s.is_active && (
-                        <span className="text-[10px] font-medium uppercase tracking-wider text-gray-600 bg-gray-800 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] font-medium uppercase tracking-wider text-neutral-600 bg-neutral-800 px-1.5 py-0.5 rounded">
                           Inactive
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-600 mt-1 ml-[18px] font-mono">
+                    <p className="text-xs text-neutral-600 mt-1 ml-[18px] font-mono">
                       {s.id.slice(0, 8)} &middot; {new Date(s.created_at).toLocaleDateString()}
                     </p>
                   </div>
@@ -355,7 +328,7 @@ export default function AdminPage() {
                     <button
                       onClick={() => handleDelete(s.id, s.name)}
                       disabled={deletingId === s.id}
-                      className="shrink-0 text-gray-500 hover:text-red-400 p-2 rounded-lg hover:bg-red-500/10 transition-all disabled:opacity-50"
+                      className="shrink-0 text-neutral-500 hover:text-red-400 p-2 rounded-lg hover:bg-red-500/10 transition-all disabled:opacity-50"
                       title="Deactivate scanner"
                     >
                       {deletingId === s.id ? (

@@ -1,7 +1,7 @@
 export const EVENT = {
-  name: "MMA Test Fight #12",
-  date: "28 February 2026, 20:00",
-  venue: "The O2 Arena, London",
+  name: "World Freak Fight League 2",
+  date: "February 28, 2026, 20:30",
+  venue: "4HP, Pearson St, Wolverhampton, UK",
 } as const;
 
 export const TICKET_TYPE_MAP: Record<string, string> = {

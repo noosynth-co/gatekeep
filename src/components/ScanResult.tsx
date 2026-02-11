@@ -58,10 +58,10 @@ export function ScanResult({ result, onDismiss }: ScanResultProps) {
   }, [isOk]);
 
   const bgClass = isOk
-    ? "from-emerald-600 to-emerald-700"
+    ? "from-[#7a9904] to-[#5c7303]"
     : isAlreadyUsed
-      ? "from-amber-500 to-amber-600"
-      : "from-red-600 to-red-700";
+      ? "from-amber-600 to-amber-700"
+      : "from-red-700 to-red-800";
 
   const label = isOk
     ? "OK"
