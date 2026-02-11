@@ -18,18 +18,28 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 30,
-    borderBottom: "2px solid #1a1a1a",
-    paddingBottom: 15,
+    backgroundColor: "#1a1a1a",
+    padding: 20,
+    borderRadius: 6,
+  },
+  logo: {
+    width: 80,
+    height: 54,
+    objectFit: "contain" as const,
+  },
+  headerText: {
+    alignItems: "flex-end",
   },
   appName: {
     fontSize: 24,
     fontFamily: "Helvetica-Bold",
-    color: "#1a1a1a",
+    color: "#ffffff",
   },
   ticketCode: {
     fontSize: 14,
-    color: "#666666",
+    color: "#cccccc",
     marginTop: 8,
   },
   eventSection: {
@@ -94,6 +104,7 @@ interface TicketPDFProps {
   ticketType: string;
   buyerName: string | null;
   qrDataUrl: string;
+  logoDataUrl: string;
 }
 
 export function TicketPDF({
@@ -101,12 +112,14 @@ export function TicketPDF({
   ticketType,
   buyerName,
   qrDataUrl,
+  logoDataUrl,
 }: TicketPDFProps) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <View>
+          <Image style={styles.logo} src={logoDataUrl} />
+          <View style={styles.headerText}>
             <Text style={styles.appName}>{APP_NAME}</Text>
             <Text style={styles.ticketCode}>{ticketCode}</Text>
           </View>
