@@ -26,11 +26,8 @@ export function ScanResult({ result, onDismiss }: ScanResultProps) {
       }
     }
 
-    // Auto-dismiss OK after 3s
-    if (isOk) {
-      const timer = setTimeout(handleDismiss, 3000);
-      return () => clearTimeout(timer);
-    }
+    const timer = setTimeout(handleDismiss, 5000);
+    return () => clearTimeout(timer);
   }, [isOk, handleDismiss]);
 
   // Play sound via Web Audio API
@@ -119,7 +116,7 @@ export function ScanResult({ result, onDismiss }: ScanResultProps) {
         )}
 
         <div className="mt-12 text-sm opacity-40">
-          {isOk ? "Auto-dismissing in 3s..." : "Tap anywhere to dismiss"}
+          Tap anywhere to dismiss
         </div>
       </div>
     </div>
