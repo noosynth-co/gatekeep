@@ -27,6 +27,11 @@ export default function AdminPage() {
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  const [resetPinId, setResetPinId] = useState<string | null>(null);
+  const [resetPinValue, setResetPinValue] = useState("");
+  const [resetPinLoading, setResetPinLoading] = useState(false);
+  const [resetPinSuccess, setResetPinSuccess] = useState<string | null>(null);
+
   const fetchScanners = useCallback(async () => {
     setLoadingScanners(true);
     try {
@@ -117,6 +122,27 @@ export default function AdminPage() {
       // ignore
     } finally {
       setDeletingId(null);
+    }
+  }
+
+  async function handleResetPin(id: string) {
+    setResetPinLoading(true);
+    try {
+      const res = await fetch(`/api/admin/scanners/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: resetPinValue }),
+      });
+      if (res.ok) {
+        setResetPinId(null);
+        setResetPinValue("");
+        setResetPinSuccess(id);
+        setTimeout(() => setResetPinSuccess(null), 3000);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setResetPinLoading(false);
     }
   }
 
@@ -325,23 +351,70 @@ export default function AdminPage() {
                   </div>
 
                   {s.is_active && (
-                    <button
-                      onClick={() => handleDelete(s.id, s.name)}
-                      disabled={deletingId === s.id}
-                      className="shrink-0 text-neutral-500 hover:text-red-400 p-2 rounded-lg hover:bg-red-500/10 transition-all disabled:opacity-50"
-                      title="Deactivate scanner"
-                    >
-                      {deletingId === s.id ? (
-                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                      ) : (
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                        </svg>
+                    <div className="flex items-center gap-1 shrink-0">
+                      {resetPinSuccess === s.id && (
+                        <span className="text-accent text-xs mr-1">PIN updated</span>
                       )}
-                    </button>
+                      {resetPinId === s.id ? (
+                        <form
+                          onSubmit={(e) => { e.preventDefault(); handleResetPin(s.id); }}
+                          className="flex items-center gap-1.5"
+                        >
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            maxLength={6}
+                            value={resetPinValue}
+                            onChange={(e) => setResetPinValue(e.target.value.replace(/\D/g, ""))}
+                            placeholder="New PIN"
+                            autoFocus
+                            className="w-20 bg-surface-light text-white rounded-lg px-2.5 py-1.5 border border-border focus:border-accent focus:ring-1 focus:ring-accent/30 focus:outline-none text-xs font-mono tracking-widest"
+                          />
+                          <button
+                            type="submit"
+                            disabled={resetPinLoading || resetPinValue.length < 4}
+                            className="text-xs font-medium text-accent hover:text-accent-dark disabled:text-neutral-600 px-2 py-1.5 rounded-lg hover:bg-accent/10 transition-all"
+                          >
+                            {resetPinLoading ? "..." : "Save"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setResetPinId(null); setResetPinValue(""); }}
+                            className="text-xs text-neutral-500 hover:text-neutral-300 px-2 py-1.5 rounded-lg hover:bg-surface-light transition-all"
+                          >
+                            Cancel
+                          </button>
+                        </form>
+                      ) : (
+                        <button
+                          onClick={() => { setResetPinId(s.id); setResetPinValue(""); setResetPinSuccess(null); }}
+                          className="text-neutral-500 hover:text-accent p-2 rounded-lg hover:bg-accent/10 transition-all"
+                          title="Reset PIN"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                          </svg>
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(s.id, s.name)}
+                        disabled={deletingId === s.id}
+                        className="shrink-0 text-neutral-500 hover:text-red-400 p-2 rounded-lg hover:bg-red-500/10 transition-all disabled:opacity-50"
+                        title="Deactivate scanner"
+                      >
+                        {deletingId === s.id ? (
+                          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                   )}
                 </div>
               ))}
