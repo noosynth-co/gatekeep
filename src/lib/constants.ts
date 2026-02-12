@@ -1,7 +1,7 @@
 export const EVENT = {
   name: "WORLD FREAK FIGHT LEAGUE 2",
   date: "February 28, 2026, 20:30",
-  venue: "4HP, Pearson St, Wolverhampton, UK",
+  venue: "The Hangar, Pearson St, Wolverhampton, WV2 4HP",
 } as const;
 
 export const TICKET_TYPE_MAP: Record<string, string> = {
