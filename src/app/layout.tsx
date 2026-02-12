@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { WebVitals } from "@/lib/axiom/client";
 import "./globals.css";
 
@@ -42,6 +44,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
+        <Analytics />
+        <SpeedInsights />
         <WebVitals />
         <div className="flex-1 flex flex-col">{children}</div>
         <footer className="py-3 text-center text-xs text-neutral-500">
