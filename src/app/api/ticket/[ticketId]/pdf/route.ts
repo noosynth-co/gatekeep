@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generateTicketPDF } from "@/lib/pdf";
+import { withAxiom } from "@/lib/axiom/server";
 
-export async function GET(
+export const GET = withAxiom(async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ ticketId: string }> },
 ) {
@@ -34,4 +35,4 @@ export async function GET(
       "Content-Disposition": `attachment; filename="ticket-${ticket.ticket_code}.pdf"`,
     },
   });
-}
+});

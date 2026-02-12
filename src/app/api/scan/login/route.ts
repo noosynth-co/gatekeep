@@ -5,8 +5,9 @@ import {
   getScannerCookieOptions,
 } from "@/lib/scanner-auth";
 import bcrypt from "bcryptjs";
+import { withAxiom } from "@/lib/axiom/server";
 
-export async function POST(req: NextRequest) {
+export const POST = withAxiom(async function POST(req: NextRequest) {
   const { scannerId, pin } = await req.json();
 
   if (!scannerId || !pin) {
@@ -45,4 +46,4 @@ export async function POST(req: NextRequest) {
   response.cookies.set(cookieOpts.name, token, cookieOpts);
 
   return response;
-}
+});

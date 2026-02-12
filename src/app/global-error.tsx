@@ -1,11 +1,24 @@
 "use client";
 
+import { useEffect } from "react";
+import { useLogger } from "@/lib/axiom/client";
+
 export default function GlobalError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const logger = useLogger();
+
+  useEffect(() => {
+    logger.error("Global unhandled error", {
+      message: error.message,
+      digest: error.digest,
+      stack: error.stack,
+    });
+  }, [error, logger]);
   return (
     <html lang="en">
       <body

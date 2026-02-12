@@ -1,13 +1,29 @@
 "use client";
 
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/constants";
+import { useLogger } from "@/lib/axiom/client";
 
 export default function Error({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const logger = useLogger();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    logger.error("Unhandled error", {
+      message: error.message,
+      digest: error.digest,
+      path: pathname,
+      stack: error.stack,
+    });
+  }, [error, logger, pathname]);
+
   return (
     <div className="flex-1 flex items-center justify-center bg-[#0a0a0a]">
       <div className="text-center p-8 max-w-md">

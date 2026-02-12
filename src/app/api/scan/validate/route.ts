@@ -3,8 +3,9 @@ import { supabase } from "@/lib/supabase";
 import { verifyQRPayload } from "@/lib/qr";
 import { verifyScannerToken } from "@/lib/scanner-auth";
 import type { ScanResponse } from "@/types";
+import { withAxiom } from "@/lib/axiom/server";
 
-export async function POST(req: NextRequest) {
+export const POST = withAxiom(async function POST(req: NextRequest) {
   const scanner = await verifyScannerToken();
   if (!scanner) {
     return NextResponse.json(
@@ -123,4 +124,4 @@ export async function POST(req: NextRequest) {
       ticket_type: updated.ticket_type,
     },
   } satisfies ScanResponse);
-}
+});

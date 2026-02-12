@@ -4,8 +4,9 @@ import { supabase } from "@/lib/supabase";
 import { ensureTicketForSession } from "@/lib/create-ticket";
 import { generateTicketPDF } from "@/lib/pdf";
 import { sendTicketEmail } from "@/lib/email";
+import { logger, withAxiom } from "@/lib/axiom/server";
 
-export async function GET(req: NextRequest) {
+export const GET = withAxiom(async function GET(req: NextRequest) {
   const sessionId = req.nextUrl.searchParams.get("sessionId");
 
   if (!sessionId) {
@@ -61,7 +62,8 @@ export async function GET(req: NextRequest) {
           .update({ email_sent_at: new Date().toISOString() })
           .eq("ticket_code", ticket.ticket_code);
       } catch (err) {
-        console.error("PDF/Email error for ticket (fallback):", ticket.ticket_code, err);
+        logger.error("PDF/Email error for ticket (fallback)", { ticketCode: ticket.ticket_code, error: err instanceof Error ? err.message : err });
+        await logger.flush();
       }
     });
   }
@@ -72,4 +74,4 @@ export async function GET(req: NextRequest) {
     ticket_type: result.ticket.ticket_type,
     buyer_name: result.ticket.buyer_name,
   });
-}
+});

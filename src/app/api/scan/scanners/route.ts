@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { withAxiom } from "@/lib/axiom/server";
 
-export async function GET() {
+export const GET = withAxiom(async function GET() {
   const { data, error } = await supabase
     .from("scanners")
     .select("id, name")
@@ -13,4 +14,4 @@ export async function GET() {
   }
 
   return NextResponse.json(data);
-}
+});

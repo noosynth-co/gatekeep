@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import type { ScanResponse } from "@/types";
+import { useLogger } from "@/lib/axiom/client";
 
 interface ScannerProps {
   onResult: (result: ScanResponse) => void;
 }
 
 export function Scanner({ onResult }: ScannerProps) {
+  const logger = useLogger();
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +74,7 @@ export function Scanner({ onResult }: ScannerProps) {
         }
       })
       .catch((err) => {
-        console.error("Camera error:", err);
+        logger.error("Camera error", { error: err instanceof Error ? err.message : String(err) });
         setError(
           "Camera access denied. Please allow camera access and reload.",
         );

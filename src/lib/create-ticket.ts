@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { generateQRPayload } from "@/lib/qr";
 import { TICKET_TYPE_MAP } from "@/lib/constants";
 import { nanoid } from "nanoid";
+import { logger } from "@/lib/axiom/server";
 
 interface Ticket {
   id: string;
@@ -107,7 +108,7 @@ export async function ensureTicketForSession(
         return { ticket: raced as Ticket, isNew: false };
       }
     }
-    console.error("Failed to insert ticket (fallback):", insertError);
+    logger.error("Failed to insert ticket (fallback)", { error: insertError });
     return null;
   }
 

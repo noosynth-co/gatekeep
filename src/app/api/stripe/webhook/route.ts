@@ -7,8 +7,9 @@ import { generateTicketPDF } from "@/lib/pdf";
 import { sendTicketEmail } from "@/lib/email";
 import { TICKET_TYPE_MAP } from "@/lib/constants";
 import { nanoid } from "nanoid";
+import { logger, withAxiom } from "@/lib/axiom/server";
 
-export async function POST(req: NextRequest) {
+export const POST = withAxiom(async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("Webhook signature verification failed:", message);
+    logger.error("Webhook signature verification failed", { message });
     return NextResponse.json({ error: message }, { status: 400 });
   }
 
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
   const buyerName = session.customer_details?.name || null;
 
   if (!buyerEmail) {
-    console.error("No email found for session:", session.id);
+    logger.error("No email found for session", { sessionId: session.id });
     return NextResponse.json(
       { error: "No customer email" },
       { status: 400 },
@@ -76,7 +77,7 @@ export async function POST(req: NextRequest) {
     if (insertError.code === "23505") {
       return NextResponse.json({ received: true, message: "Already processed" });
     }
-    console.error("Failed to insert ticket:", insertError);
+    logger.error("Failed to insert ticket", { error: insertError });
     return NextResponse.json(
       { error: "Database error" },
       { status: 500 },
@@ -107,9 +108,10 @@ export async function POST(req: NextRequest) {
         .update({ email_sent_at: new Date().toISOString() })
         .eq("ticket_code", ticketCode);
     } catch (err) {
-      console.error("PDF/Email error for ticket:", ticketCode, err);
+      logger.error("PDF/Email error for ticket", { ticketCode, error: err instanceof Error ? err.message : err });
+      await logger.flush();
     }
   });
 
   return NextResponse.json({ received: true, ticketCode });
-}
+});

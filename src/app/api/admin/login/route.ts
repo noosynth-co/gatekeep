@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminToken, getAdminCookieOptions } from "@/lib/admin-auth";
+import { withAxiom } from "@/lib/axiom/server";
 
-export async function POST(req: NextRequest) {
+export const POST = withAxiom(async function POST(req: NextRequest) {
   const { password } = await req.json();
 
   if (!password) {
@@ -25,4 +26,4 @@ export async function POST(req: NextRequest) {
   response.cookies.set(cookieOpts.name, token, cookieOpts);
 
   return response;
-}
+});

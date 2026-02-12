@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { verifyAdminToken } from "@/lib/admin-auth";
+import { withAxiom } from "@/lib/axiom/server";
 
-export async function DELETE(
+export const DELETE = withAxiom(async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
@@ -26,4 +27,4 @@ export async function DELETE(
   }
 
   return NextResponse.json({ success: true });
-}
+});

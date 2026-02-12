@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { verifyAdminToken } from "@/lib/admin-auth";
 import bcrypt from "bcryptjs";
+import { logger, withAxiom } from "@/lib/axiom/server";
 
-export async function GET() {
+export const GET = withAxiom(async function GET() {
   try {
     const isAdmin = await verifyAdminToken();
     if (!isAdmin) {
@@ -16,7 +17,7 @@ export async function GET() {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Supabase scanners fetch error:", error);
+      logger.error("Supabase scanners fetch error", { error });
       return NextResponse.json(
         { error: "Failed to fetch scanners" },
         { status: 500 },
@@ -25,15 +26,15 @@ export async function GET() {
 
     return NextResponse.json(data ?? []);
   } catch (err) {
-    console.error("Admin scanners GET error:", err);
+    logger.error("Admin scanners GET error", { error: err instanceof Error ? err.message : err });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
     );
   }
-}
+});
 
-export async function POST(req: NextRequest) {
+export const POST = withAxiom(async function POST(req: NextRequest) {
   const isAdmin = await verifyAdminToken();
   if (!isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -71,4 +72,4 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(data, { status: 201 });
-}
+});
